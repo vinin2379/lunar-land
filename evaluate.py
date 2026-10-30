@@ -3,37 +3,39 @@ import os
 import gymnasium as gym
 import torch
 from agent import QNetwork
+from genetic_train import RocketBrain
 from wrappers import LimitedFuelAndImpactWrapper
 
 
-def evaluate_milestones(model_base_name, simple_arch):
-    """Loads milestone checkpoints and renders one evaluation episode for each."""
-    milestones = [1, 100, 150, 200, 300]
+def evaluate_best_model(model_path, model_type="dqn"):
+    """Loads the best trained model and runs 5 visual evaluation episodes."""
     raw_env = gym.make("LunarLander-v3", render_mode="human")
-    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=80.0)
-
+    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=100.0)
 
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
 
-    print(f"\n🚀 Running Milestone Evaluation for: '{model_base_name}'...\n")
+    if not os.path.exists(model_path):
+        print(f"⚠️ Model file '{model_path}' not found! Train it first.")
+        return
 
-    for ep in milestones:
-        model_path = f"models/{model_base_name}_ep{ep}.pt"
-
-        if not os.path.exists(model_path):
-            print(f"⚠️ Checkpoint file '{model_path}' not found! Train the model first.")
-            continue
-
+    # Instantiate appropriate network architecture
+    if model_type == "genetic":
+        model = RocketBrain(state_dim, action_dim)
+    else:
+        simple_arch = "baseline" in model_path
         model = QNetwork(state_dim, action_dim, simple_arch=simple_arch)
-        model.load_state_dict(torch.load(model_path))
-        model.eval()
 
-        print(f"--- Visualizing Agent at Episode {ep} ---")
+    model.load_state_dict(torch.load(model_path))
+    model.eval()
 
+    print(f"\n🚀 Running 5 evaluation episodes for [{model_type.upper()}]: '{model_path}'...\n")
+
+    for episode in range(1, 6):
         state, _ = env.reset()
         total_reward = 0
         done = False
+        last_info = {}
 
         while not done:
             state_tensor = torch.FloatTensor(state).unsqueeze(0)
@@ -43,11 +45,12 @@ def evaluate_milestones(model_base_name, simple_arch):
             state, reward, terminated, truncated, info = env.step(action)
             done = terminated or truncated
             total_reward += reward
+            last_info = info
 
         print(
-            f"Result (Ep {ep:3d}): Reward = {total_reward:6.2f} | "
-            f"Fuel Left = {info.get('fuel_left', 0):.1f} | "
-            f"{info.get('impact_status', '')}\n"
+            f"Episode {episode}: Reward = {total_reward:6.2f} | "
+            f"Fuel Left = {last_info.get('fuel_left', 0):.1f} | "
+            f"{last_info.get('impact_status', '')}"
         )
 
     env.close()
@@ -55,17 +58,19 @@ def evaluate_milestones(model_base_name, simple_arch):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Evaluate trained LunarLander model milestones visually"
+        description="Evaluate the best trained LunarLander model visually"
     )
     parser.add_argument(
         "--mode",
-        choices=["simple", "full"],
+        choices=["simple", "full", "genetic"],
         default="full",
-        help="Choose model to evaluate: 'simple' or 'full'",
+        help="Select model to evaluate: 'simple', 'full', or 'genetic' (default: 'full')",
     )
     args = parser.parse_args()
 
     if args.mode == "simple":
-        evaluate_milestones("baseline_no_exploration", simple_arch=True)
-    else:
-        evaluate_milestones("dqn_full", simple_arch=False)
+        evaluate_best_model("models/baseline_no_exploration.pt", model_type="dqn")
+    elif args.mode == "full":
+        evaluate_best_model("models/dqn_full.pt", model_type="dqn")
+    elif args.mode == "genetic":
+        evaluate_best_model("models/genetic_best.pt", model_type="genetic")

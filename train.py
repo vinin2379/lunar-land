@@ -8,12 +8,11 @@ from wrappers import LimitedFuelAndImpactWrapper
 
 
 def train_agent(
-    use_exploration, simple_arch, model_name, episodes=300, verbose=True
+    use_exploration, simple_arch, model_name, episodes=600, verbose=True
 ):
-    """Executes training loop with fuel limits and saves milestone checkpoints."""
+    """Executes training loop with fuel limits and saves only the final model state."""
     raw_env = gym.make("LunarLander-v3")
     env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=100.0)
-    
 
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
@@ -25,7 +24,6 @@ def train_agent(
         simple_arch=simple_arch,
     )
     rewards_history = []
-    milestones = [1, 100, 150, 200, 300]
 
     os.makedirs("models", exist_ok=True)
 
@@ -60,14 +58,7 @@ def train_agent(
         rewards_history.append(total_reward)
         avg_reward = np.mean(rewards_history[-100:])
 
-        # Save model checkpoint at specific milestones
-        if episode in milestones:
-            checkpoint_path = f"models/{model_name}_ep{episode}.pt"
-            torch.save(agent.policy_net.state_dict(), checkpoint_path)
-            if verbose:
-                print(f" [CHECKPOINT] Saved milestone model: {checkpoint_path}")
-
-        if verbose and (episode % 10 == 0 or episode in milestones):
+        if verbose and episode % 10 == 0:
             impact = last_info.get("impact_status", "N/A")
             fuel = last_info.get("fuel_left", 0)
             print(
@@ -79,9 +70,11 @@ def train_agent(
                 f"{impact}"
             )
 
-    # Save final model state
+    # Save only the final trained model state
     save_path = f"models/{model_name}.pt"
     torch.save(agent.policy_net.state_dict(), save_path)
+    if verbose:
+        print(f"\n[DONE] Final model saved successfully to: '{save_path}'")
 
     env.close()
     return rewards_history
