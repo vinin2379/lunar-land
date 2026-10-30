@@ -50,6 +50,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.mode == "simple":
-    evaluate("models/baseline_no_exploration.pt", simple_arch=True)
-else:
-    evaluate("models/dqn_full.pt", simple_arch=False)
+        evaluate("models/baseline_no_exploration.pt", simple_arch=True)
+    else:
+        evaluate("models/dqn_full.pt", simple_arch=False)
