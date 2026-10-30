@@ -45,8 +45,7 @@ class DQNAgent:
         self.gamma = 0.99  # Discount factor for future rewards
         self.lr = 5e-4  # Learning rate
 
-        # Exploration parameters
-        # If use_exploration is False, epsilon stays at 0.0 (greedy policy only)
+        # Exploration parameters (decayed per EPISODE in train.py)
         self.epsilon = 1.0 if use_exploration else 0.0
         self.epsilon_min = 0.01
         self.epsilon_decay = 0.995
@@ -54,7 +53,7 @@ class DQNAgent:
         self.batch_size = 64
         self.memory = deque(maxlen=100000)  # Experience replay buffer
 
-        # Networks setup (Policy and Target networks)
+        # Policy and Target networks
         self.policy_net = QNetwork(
             state_dim, action_dim, simple_arch=simple_arch
         )
@@ -93,7 +92,7 @@ class DQNAgent:
         next_states = torch.FloatTensor(np.array(next_states))
         dones = torch.FloatTensor(dones).unsqueeze(1)
 
-        # Compute current Q-values using Policy Network
+        # Compute current Q-values
         q_values = self.policy_net(states).gather(1, actions)
 
         # Compute target Q-values using Target Network
@@ -106,10 +105,6 @@ class DQNAgent:
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
-
-        # Decay exploration rate over time
-        if self.use_exploration and self.epsilon > self.epsilon_min:
-            self.epsilon *= self.epsilon_decay
 
     def update_target_network(self):
         """Copies policy network weights to target network for stability."""
