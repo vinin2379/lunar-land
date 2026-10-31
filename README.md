@@ -47,7 +47,7 @@ Comparing the fully tuned agent (`DQN Full`) against a baseline trained without 
 
 | Metric / Behavior | DQN Full (Strict Wrapper) | DQN Incomplete (Unrestricted Wrapper) |
 | :--- | :---: | :---: |
-| **Landing Alignment ($|X| \le 0.08$)** | 🚀 **Strictly Centered** | ⚠️ Off-Target / Drift |
+| **Landing Alignment (|X| ≤ 0.08)** | 🚀 **Strictly Centered** | ⚠️ Off-Target / Drift |
 | **Hovering & Leg Bouncing** | ❌ **Eliminated** | ⚠️ High Occurrence |
 | **Engine Cutoff at Touchdown** | 🛑 **Immediate** | ⚠️ Continuous Fuel Waste |
 | **Average Reward** | **+416.7** | ~ +180.0 |
