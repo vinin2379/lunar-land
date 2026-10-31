@@ -6,6 +6,7 @@ import gymnasium as gym
 import imageio
 from agent import DQNAgent
 from wrappers import LimitedFuelAndImpactWrapper
+# Garante o parâmetro loop=0 para repetir infinitamente no navegador
 
 
 def generate_best_gif(model_path="models/dqn_full.pt", output_gif="landing_demo.gif", max_fuel=200.0, max_trials=10):
@@ -86,7 +87,7 @@ def generate_best_gif(model_path="models/dqn_full.pt", output_gif="landing_demo.
     env.close()
 
     if best_frames:
-        imageio.mimsave(output_gif, best_frames, fps=30)
+        imageio.mimsave(output_gif, best_frames, fps=30, loop = 0)
         print(f"✅ GIF successfully saved to '{output_gif}'!")
         print(f"📊 Captured Episode Reward: {best_reward:.2f} | Status: {best_status}")
 

@@ -4,12 +4,15 @@ This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic 
 
 ---
 
-| Perfect Landing Demonstration (DQN Full) |
-| :---: |
-| ![Lunar Lander Demo](assets/landing_demo.gif) |
-| ![Lunar Lander Demo](assets/landing_demo2.gif) |
-| ![Lunar Lander Demo](assets/landing_demo3.gif) |
-| *Agent executing controlled descent, zeroing thrusters upon touchdown, and centering strictly between the flags.* |
+## 📸 Visual Showcase & Media Setup
+
+> **Media Setup Note:**
+> Ensure all GIFs are saved with infinite looping (`loop=0` in `imageio.mimsave`) so they play continuously without requiring a browser refresh.
+
+| Landing Demo 1 | Landing Demo 2 | Landing Demo 3 |
+| :---: | :---: | :---: |
+| ![Lunar Lander Demo 1](assets/landing_demo.gif) | ![Lunar Lander Demo 2](assets/landing_demo2.gif) | ![Lunar Lander Demo 3](assets/landing_demo3.gif) |
+| *Controlled Descent & Centering* | *Engine Cutoff at Touchdown* | *Fuel Preservation Trajectory* |
 
 ---
 
@@ -75,21 +78,54 @@ A comparative evaluation between Deep Reinforcement Learning (DQN) and Evolution
 ```text
 .
 ├── assets/                                  # Visual assets for documentation
-│   ├── landing_demo.gif                     # Recorded GIF of optimal landing
-│   ├── landing_demo2.gif                     # Recorded GIF of optimal landing
-│   ├── landing_demo3.gif                     # Recorded GIF of optimal landing
+│   ├── landing_demo.gif                     # Recorded GIF of optimal landing 1
+│   ├── landing_demo2.gif                    # Recorded GIF of optimal landing 2
+│   ├── landing_demo3.gif                    # Recorded GIF of optimal landing 3
 │   ├── training_comparison_300_600_1000.png # 3-checkpoint comparative dashboard
 │   ├── dqn_full_vs_incomplete.png           # Reward shaping comparison chart
-│   └── dqn_vs_genetic.png                   # RL vs GA comparison chart
+│   ├── dqn_vs_genetic.png                   # RL vs GA comparison chart
+│   └── dqn_custom_vs_standard.png           # Environment benchmark comparison
 ├── models/                                  # Saved PyTorch model checkpoints
 │   ├── dqn_300.pt
 │   ├── dqn_600.pt
 │   ├── dqn_1000.pt
-│   └── dqn_full.pt
+│   ├── dqn_full.pt
+│   └── genetic_best.pt
 ├── agent.py                                 # DQNAgent class & PyTorch network architecture
 ├── wrappers.py                              # LimitedFuelAndImpactWrapper implementation
 ├── train.py                                 # Main training loop script
-├── Evaluate.py                              # Evaluation script with terminal diagnostics
-├── generate_gif.py                          # Smart GIF generator filtered by fuel economy
-├── compare_models.py                        # Automated benchmark and plot generator
+├── genetic_train.py                         # Evolutionary optimization script
+├── Evaluate.py                              # Interactive evaluation script (terminal & visual)
+├── generate_gif.py                          # Smart GIF generator with infinite loop support
+├── compare_models.py                        # Automated checkpoint comparison dashboard
+├── compare_genetic.py                       # DQN vs Genetic Algorithm benchmark script
+├── compare_wrappers.py                      # Custom vs Standard Environment comparison script
 └── README.md                                # Single-file project documentation
+
+
+## 🚀 How to Run
+
+Execute all pipeline steps sequentially from your terminal:
+
+```powershell
+# 1. Install required dependencies
+uv pip install gymnasium torch numpy matplotlib imageio
+
+# 2. Train the full DQN model (1000 episodes, 200.0 max fuel)
+.\.venv\Scripts\python.exe train.py --mode full --episodes 1000 --max_fuel 200.0
+
+# 3. Train the Genetic Algorithm model (1000 generations)
+.\.venv\Scripts\python.exe genetic_train.py --generations 1000 --pop_size 30 --max_fuel 200.0
+
+# 4. Evaluate model performance with visual rendering
+.\.venv\Scripts\python.exe Evaluate.py --mode dqn --model models/dqn_1000.pt --env_type custom
+
+# 5. Generate infinite-loop landing GIFs
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo.gif --max_fuel 200.0
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo2.gif --max_fuel 200.0
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo3.gif --max_fuel 200.0
+
+# 6. Run comparative benchmarks and update plot figures
+.\.venv\Scripts\python.exe compare_models.py --model300 models/dqn_300.pt --model600 models/dqn_600.pt --model1000 models/dqn_1000.pt --max_fuel 200.0
+.\.venv\Scripts\python.exe compare_genetic.py --dqn_model models/dqn_1000.pt --ga_model models/genetic_best.pt --runs 200
+.\.venv\Scripts\python.exe compare_wrappers.py --model models/dqn_1000.pt --runs 200
