@@ -114,7 +114,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--generations",
         type=int,
-        default=300,
+        default=1000,
         help="Número de gerações (padrão: 300)",
     )
     args = parser.parse_args()

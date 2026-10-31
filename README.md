@@ -4,15 +4,11 @@ This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic 
 
 ---
 
-## 📸 Visual Showcase & Media Setup
-
-> **Media Setup Guide:**
-> 1. Save your captured landing GIF to `assets/landing_demo.gif`.
-> 2. Save your generated comparison charts inside the `assets/` directory.
-
 | Perfect Landing Demonstration (DQN Full) |
 | :---: |
 | ![Lunar Lander Demo](assets/landing_demo.gif) |
+| ![Lunar Lander Demo](assets/landing_demo2.gif) |
+| ![Lunar Lander Demo](assets/landing_demo3.gif) |
 | *Agent executing controlled descent, zeroing thrusters upon touchdown, and centering strictly between the flags.* |
 
 ---
