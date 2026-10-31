@@ -6,8 +6,7 @@ This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic 
 
 ## 📸 Visual Showcase & Media Setup
 
-> **Media Setup Note:**
-> Ensure all GIFs are saved with infinite looping (`loop=0` in `imageio.mimsave`) so they play continuously without requiring a browser refresh.
+
 
 | Landing Demo 1 | Landing Demo 2 | Landing Demo 3 |
 | :---: | :---: | :---: |
