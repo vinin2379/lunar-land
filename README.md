@@ -103,9 +103,38 @@ uv pip install gymnasium torch numpy matplotlib imageio
 
 ---
 
+## 🚀 How to Run
+
+**Why uv?**  
+This project uses uv to strictly pin and enforce the precise Python version required by Gymnasium and PyTorch dependencies, avoiding C++ build tool errors or environment mismatches, while providing lightning-fast virtual environment initialization.
+
+Execute all pipeline steps sequentially from your terminal:
+
+
+# 1. Install required dependencies (using uv for version pinning and ultra-fast setup)
+uv pip install gymnasium torch numpy matplotlib imageio
+
+# 2. Train the full DQN model (1000 episodes, 200.0 max fuel)
+.\.venv\Scripts\python.exe train.py --mode full --episodes 1000 --max_fuel 200.0
+
+# 3. Train the Genetic Algorithm model (1000 generations)
+.\.venv\Scripts\python.exe genetic_train.py --generations 1000 --pop_size 30 --max_fuel 200.0
+
+# 4. Evaluate model performance with visual rendering
+.\.venv\Scripts\python.exe Evaluate.py --mode dqn --model models/dqn_1000.pt --env_type custom
+
+# 5. Generate infinite-loop landing GIFs
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo.gif --max_fuel 200.0
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo2.gif --max_fuel 200.0
+.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo3.gif --max_fuel 200.0
+
+# 6. Run comparative benchmarks and update plot figures
+.\.venv\Scripts\python.exe compare_models.py --model300 models/dqn_300.pt --model600 models/dqn_600.pt --model1000 models/dqn_1000.pt --max_fuel 200.0
+.\.venv\Scripts\python.exe compare_genetic.py --dqn_model models/dqn_1000.pt --ga_model models/genetic_best.pt --runs 200
+.\.venv\Scripts\python.exe compare_wrappers.py --model models/dqn_1000.pt --runs 200
+
 ## 💻 Repository Structure
 
-```text
 .
 ├── assets/                                  # Visual assets for documentation
 │   ├── landing_demo.gif                     # Recorded GIF of optimal landing 1
