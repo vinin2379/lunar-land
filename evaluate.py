@@ -10,7 +10,7 @@ from wrappers import LimitedFuelAndImpactWrapper
 def evaluate_best_model(model_path, model_type="dqn"):
     """Loads the best trained model and runs 5 visual evaluation episodes."""
     raw_env = gym.make("LunarLander-v3", render_mode="human")
-    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=100.0)
+    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=200.0)
 
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n

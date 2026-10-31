@@ -8,11 +8,11 @@ from wrappers import LimitedFuelAndImpactWrapper
 
 
 def train_agent(
-    use_exploration, simple_arch, model_name, episodes=600, verbose=True
+    use_exploration, simple_arch, model_name, episodes=300, verbose=True
 ):
     """Executes training loop with fuel limits and saves only the final model state."""
     raw_env = gym.make("LunarLander-v3")
-    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=100.0)
+    env = LimitedFuelAndImpactWrapper(raw_env, max_fuel=200.0)
 
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.n
