@@ -81,24 +81,30 @@ Execute all pipeline steps sequentially from your terminal:
 # 1. Install required dependencies (using uv for version pinning and ultra-fast setup)
 uv pip install gymnasium torch numpy matplotlib imageio
 
-# 2. Train the full DQN model (1000 episodes, 200.0 max fuel)
+# 2.1 Train the full DQN model (1000 episodes, 200.0 max fuel)
 .\.venv\Scripts\python.exe train.py --mode full --episodes 1000 --max_fuel 200.0
 
-# 3. Train the Genetic Algorithm model (1000 generations)
+# 2.2 Train the basic DQN (1000 episodes, 200.0 max fuel)
+.\.venv\Scripts\python.exe train.py --mode simple --episodes 1000 --max_fuel 200.0
+
+# 2.3 Train the Genetic Algorithm model (1000 generations)
 .\.venv\Scripts\python.exe genetic_train.py --generations 1000 --pop_size 30 --max_fuel 200.0
 
 # 4. Evaluate model performance with visual rendering
 .\.venv\Scripts\python.exe Evaluate.py --mode dqn --model models/dqn_1000.pt --env_type custom
 
-# 5. Generate infinite-loop landing GIFs
+# 5. Generate landing GIFs
 .\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo.gif --max_fuel 200.0
-.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo2.gif --max_fuel 200.0
-.\.venv\Scripts\python.exe generate_gif.py --model models/dqn_full.pt --output assets/landing_demo3.gif --max_fuel 200.0
 
 # 6. Run comparative benchmarks and update plot figures
 .\.venv\Scripts\python.exe compare_models.py --model300 models/dqn_300.pt --model600 models/dqn_600.pt --model1000 models/dqn_1000.pt --max_fuel 200.0
 .\.venv\Scripts\python.exe compare_genetic.py --dqn_model models/dqn_1000.pt --ga_model models/genetic_best.pt --runs 200
-.\.venv\Scripts\python.exe compare_wrappers.py --model models/dqn_1000.pt --runs 200
+
+# 7.1 Train and run comparative benchmarks between Full DQN and Simple
+.\.venv\Scripts\python.exe compare_train.py
+
+# 7.2 Train and run comparative benchmarks between Full DQN and Genetic
+.\.venv\Scripts\python.exe compare_genetic_train.py 
 ```
 
 ---
@@ -119,16 +125,17 @@ uv pip install gymnasium torch numpy matplotlib imageio
 │   ├── dqn_300.pt
 │   ├── dqn_600.pt
 │   ├── dqn_1000.pt
-│   ├── dqn_full.pt
+│   ├── baseline_no_exploration.pt
 │   └── genetic_best.pt
 ├── agent.py                                 # DQNAgent class & PyTorch network architecture
 ├── wrappers.py                              # LimitedFuelAndImpactWrapper implementation
 ├── train.py                                 # Main training loop script
 ├── genetic_train.py                         # Evolutionary optimization script
-├── Evaluate.py                              # Interactive evaluation script (terminal & visual)
+├── evaluate.py                              # Interactive evaluation script (terminal & visual)
 ├── generate_gif.py                          # Smart GIF generator with infinite loop support
+├── compare_train.py                         # Live training benchmark comparing Full DQN and Simple DQN
+├── compare_genetic_train.py                 # Live training benchmark comparing DQN and Genetic Algorithm
 ├── compare_models.py                        # Automated checkpoint comparison dashboard
 ├── compare_genetic.py                       # DQN vs Genetic Algorithm benchmark script
-├── compare_wrappers.py                      # Custom vs Standard Environment comparison script
 └── README.md                                # Single-file project documentation
 ```
