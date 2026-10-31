@@ -4,14 +4,14 @@ This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic 
 
 ---
 
-## 📸 Visual Showcase & Media Setup
+## 📸 Visual Showcase
 
 
 
 | Landing Demo 1 | Landing Demo 2 | Landing Demo 3 |
 | :---: | :---: | :---: |
 | ![Lunar Lander Demo 1](assets/landing_demo.gif) | ![Lunar Lander Demo 2](assets/landing_demo2.gif) | ![Lunar Lander Demo 3](assets/landing_demo3.gif) |
-| *Controlled Descent & Centering* | *Engine Cutoff at Touchdown* | *Fuel Preservation Trajectory* |
+| *Controlled Descent & Centering* | *Engine Cutoff at Touchdown* | *Controlled Descent & Centering* |
 
 ---
 
