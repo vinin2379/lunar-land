@@ -1,6 +1,6 @@
 # 🚀 Autonomous Lunar Lander: Deep Q-Learning & Evolutionary Algorithms
 
-This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic Algorithm (GA)** agents to solve the `LunarLander-v3` environment from Gymnasium. The primary objective is to achieve **ultra-precise, fuel-efficient, and perfectly centered landings** ($|X| \le 0.08$) while eliminating hovering, leg bounce, or out-of-bounds crashes.
+This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic Algorithm (GA)** agents to solve the `LunarLander-v3` environment from Gymnasium. The primary objective is to achieve **ultra-precise, fuel-efficient, and centered landings** while eliminating hovering, leg bounce, or out-of-bounds crashes.
 
 ---
 
@@ -18,7 +18,7 @@ This repository implements and evaluates **Deep Q-Network (DQN)** and **Genetic 
 To enforce strict, realistic flight dynamics and eliminate exploit behaviors (such as infinite hovering or bouncing), the raw environment is wrapped with `LimitedFuelAndImpactWrapper`:
 
 - **Capped Fuel Capacity (200.0 Units):** Deducts fuel on every main ($0.8$) and side ($0.2$) engine firing.
-- **Narrow Target Pad ($|X| \le 0.08$):** Rewards landing strictly on the center pad while penalizing lateral drift.
+- **Narrow Target Pad:** Rewards landing strictly on the center pad while penalizing lateral drift.
 - **Ground Thruster Lockout:** Applies severe penalties for firing engines while leg contact is active, forcing immediate engine cutoff.
 - **Strict Landing Conditions:** Requires simultaneous **dual-leg ground contact**, **zero active thrusters**, and a **10-step stability hold**.
 - **Out-of-Bounds Enforcement (-300.0 Penalty):** Immediately terminates episodes if the vehicle drifts off-screen.
